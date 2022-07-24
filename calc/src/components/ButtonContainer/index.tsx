@@ -24,7 +24,19 @@ export function ButtonContainer({ ...rest }: ButtonContainerProps) {
       handleSetExpression("0");
       handleSetResult("");
     },
-    back: () => handleSetExpression(expression.slice(0, -1)),
+
+    back: () => {
+      if (expression !== "0" && expression.length !== 1) {
+        handleSetExpression(expression.slice(0, -1));
+        return;
+      }
+
+      if (expression.length === 1) {
+        handleSetExpression("0");
+        return;
+      }
+    },
+
     minus: () => handleSetExpression(expression + "-"),
     plus: () => handleSetExpression(expression + "+"),
     divide: () => handleSetExpression(expression + "/"),
@@ -42,13 +54,14 @@ export function ButtonContainer({ ...rest }: ButtonContainerProps) {
 
     if (expression === "0" && !isNaN(Number(parcedValue))) {
       const num = Number(parcedValue);
-      console.log(num);
       handleSetExpression(num.toString());
       return;
     }
 
     if (isNaN(Number(value)) && !exceptions.includes(parcedValue)) {
-      handleSetExpression(expression.slice(0, -1));
+      console.log(expression);
+      const tempExpression = expression.slice(0, -1);
+      handleSetExpression(tempExpression);
     }
 
     if (typeof buttonFunc[parcedValue] === "function") {
@@ -138,8 +151,8 @@ export function ButtonContainer({ ...rest }: ButtonContainerProps) {
 
       <HStack space={6}>
         <CustomButton value="1" icon={Backspace} />
-        <CustomButton value="." />
-        <CustomButton value="3" />
+        <CustomButton value="0" onPress={() => handlePress("0")} />
+        <CustomButton value="." onPress={() => handlePress(".")} />
         <CustomButton
           value="="
           icon={Equals}
