@@ -35,10 +35,14 @@ export default function App() {
 
   return (
     <NativeBaseProvider theme={THEME}>
-      <StatusBar animated />
+      <StatusBar
+        barStyle="light-content"
+        translucent
+        backgroundColor="transparent"
+      />
 
       <CalcProvider>
-        <VStack bg="gray.900" flex={1} p={4} space={8}>
+        <VStack bg="gray.900" flex={1} p={4} pt={8} space={8}>
           <Display result={""} expression={expression} flex={1} />
 
           <ButtonContainer flex={3} />

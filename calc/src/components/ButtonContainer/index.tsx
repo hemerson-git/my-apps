@@ -12,7 +12,22 @@ import {
 } from "phosphor-react-native";
 import { useCalcProvider } from "../../contexts/CalcContext";
 
+import {
+  avoidMultipleFollowingOperations,
+  removeBegginingZero,
+} from "../../utils/calculator";
+
 interface ButtonContainerProps extends IBoxProps {}
+
+interface ButtonFunctionsProps {
+  ac: () => {};
+  back: () => {};
+  minus: () => {};
+  plus: () => {};
+  divide: () => {};
+  multiply: () => {};
+  equals: () => {};
+}
 
 export function ButtonContainer({ ...rest }: ButtonContainerProps) {
   const [result, setResult] = useState("");
@@ -42,34 +57,52 @@ export function ButtonContainer({ ...rest }: ButtonContainerProps) {
     divide: () => handleSetExpression(expression + "/"),
     multiply: () => handleSetExpression(expression + "*"),
     equals: () => {
-      const total = eval(expression);
-      handleSetResult(total);
-      handleSetExpression(expression);
+      const lastItem = expression[expression.length - 1];
+
+      if (!isNaN(Number(lastItem))) {
+        const total = eval(expression);
+        handleSetResult(total);
+        handleSetExpression(expression);
+      }
     },
-  };
+  } as ButtonFunctionsProps;
 
   function handlePress(value: string) {
-    const parcedValue = value.toLowerCase().trim() as keyof typeof buttonFunc;
-    const exceptions = ["ac", "back", ".", "="];
+    const parcedValue = value
+      .toLowerCase()
+      .trim() as keyof ButtonFunctionsProps;
 
-    if (expression === "0" && !isNaN(Number(parcedValue))) {
-      const num = Number(parcedValue);
-      handleSetExpression(num.toString());
+    const exceptions = ["ac", "back", ".", "="];
+    let aux = "0";
+
+    if (expression === "0" && value === "0") {
+      return;
+    }
+
+    // Remove zero from the beginning of the expression
+    if (!!expression && !isNaN(Number(value))) {
+      const numberWithoutBegginingZero = removeBegginingZero(expression);
+      console.log("Number", numberWithoutBegginingZero);
+      handleSetExpression(numberWithoutBegginingZero + value);
       return;
     }
 
     if (isNaN(Number(value)) && !exceptions.includes(parcedValue)) {
-      console.log(expression);
-      const tempExpression = expression.slice(0, -1);
-      handleSetExpression(tempExpression);
+      const valueWithoutMultipleOperators = expression.slice(0, -1);
+      handleSetExpression(valueWithoutMultipleOperators);
+      buttonFunc[parcedValue]();
+      return;
     }
 
+    // Execute the button function
     if (typeof buttonFunc[parcedValue] === "function") {
       buttonFunc[parcedValue]();
       return;
     }
 
-    handleSetExpression(expression + value);
+    console.log(aux);
+
+    handleSetExpression(aux + value);
   }
 
   useEffect(() => {
