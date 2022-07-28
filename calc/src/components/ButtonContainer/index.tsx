@@ -31,8 +31,12 @@ interface ButtonFunctionsProps {
 
 export function ButtonContainer({ ...rest }: ButtonContainerProps) {
   const [result, setResult] = useState("");
-  const { handleSetExpression, expression, handleSetResult } =
-    useCalcProvider();
+  const {
+    handleSetExpression,
+    expression,
+    handleSetResult,
+    removeLastExpression,
+  } = useCalcProvider();
 
   const buttonFunc = {
     ac: () => {
@@ -88,10 +92,7 @@ export function ButtonContainer({ ...rest }: ButtonContainerProps) {
     }
 
     if (isNaN(Number(value)) && !exceptions.includes(parcedValue)) {
-      const valueWithoutMultipleOperators = expression.slice(0, -1);
-      handleSetExpression(valueWithoutMultipleOperators);
-      buttonFunc[parcedValue]();
-      return;
+      removeLastExpression();
     }
 
     // Execute the button function

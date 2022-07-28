@@ -5,6 +5,7 @@ interface CalcContextProps {
   result: string;
   handleSetExpression: (value: string) => void;
   handleSetResult: (value: string) => void;
+  removeLastExpression: () => void;
 }
 
 interface CalcProviderProps {
@@ -29,9 +30,19 @@ function CalcProvider({ children }: CalcProviderProps) {
     setResult(value);
   }
 
+  function removeLastExpression() {
+    setExpression(expression.slice(0, -1));
+  }
+
   return (
     <CalcContext.Provider
-      value={{ expression, handleSetExpression, result, handleSetResult }}
+      value={{
+        expression,
+        handleSetExpression,
+        result,
+        handleSetResult,
+        removeLastExpression,
+      }}
     >
       {children}
     </CalcContext.Provider>
