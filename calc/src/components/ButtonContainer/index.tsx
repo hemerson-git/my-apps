@@ -12,31 +12,24 @@ import {
 } from "phosphor-react-native";
 import { useCalcProvider } from "../../contexts/CalcContext";
 
-import {
-  avoidMultipleFollowingOperations,
-  removeBegginingZero,
-} from "../../utils/calculator";
+import { removeBegginingZero } from "../../utils/calculator";
 
 interface ButtonContainerProps extends IBoxProps {}
 
 interface ButtonFunctionsProps {
   ac: () => {};
   back: () => {};
-  minus: () => {};
-  plus: () => {};
-  divide: () => {};
-  multiply: () => {};
+  minus: string;
+  plus: string;
+  divide: string;
+  multiply: string;
   equals: () => {};
 }
 
 export function ButtonContainer({ ...rest }: ButtonContainerProps) {
   const [result, setResult] = useState("");
-  const {
-    handleSetExpression,
-    expression,
-    handleSetResult,
-    removeLastExpression,
-  } = useCalcProvider();
+  const { handleSetExpression, expression, handleSetResult } =
+    useCalcProvider();
 
   const buttonFunc = {
     ac: () => {
@@ -56,10 +49,11 @@ export function ButtonContainer({ ...rest }: ButtonContainerProps) {
       }
     },
 
-    minus: () => handleSetExpression(expression + "-"),
-    plus: () => handleSetExpression(expression + "+"),
-    divide: () => handleSetExpression(expression + "/"),
-    multiply: () => handleSetExpression(expression + "*"),
+    minus: "-",
+    plus: "+",
+    divide: "/",
+    multiply: "*",
+    dot: ".",
     equals: () => {
       const lastItem = expression[expression.length - 1];
 
@@ -69,19 +63,20 @@ export function ButtonContainer({ ...rest }: ButtonContainerProps) {
         handleSetExpression(expression);
       }
     },
-  } as ButtonFunctionsProps;
+  };
 
   function handlePress(value: string) {
     const parcedValue = value
       .toLowerCase()
       .trim() as keyof ButtonFunctionsProps;
 
-    const exceptions = ["ac", "back", ".", "="];
-    let aux = "0";
+    const exceptions = ["ac", "back", "="];
 
     if (expression === "0" && value === "0") {
       return;
     }
+
+    console.log(parcedValue);
 
     // Remove zero from the beginning of the expression
     if (!!expression && !isNaN(Number(value))) {
@@ -91,19 +86,25 @@ export function ButtonContainer({ ...rest }: ButtonContainerProps) {
       return;
     }
 
-    if (isNaN(Number(value)) && !exceptions.includes(parcedValue)) {
-      removeLastExpression();
+    if (isNaN(Number(value)) && typeof buttonFunc[parcedValue] !== "function") {
+      if (isNaN(Number(expression[expression.length - 1]))) {
+        const newExpression = expression.slice(0, -1) + buttonFunc[parcedValue];
+        handleSetExpression(newExpression);
+        return;
+      }
+
+      handleSetExpression(expression + buttonFunc[parcedValue]);
+      return;
     }
 
     // Execute the button function
     if (typeof buttonFunc[parcedValue] === "function") {
+      //@ts-ignore
       buttonFunc[parcedValue]();
       return;
     }
 
-    console.log(aux);
-
-    handleSetExpression(aux + value);
+    handleSetExpression(expression + value);
   }
 
   useEffect(() => {
@@ -186,7 +187,7 @@ export function ButtonContainer({ ...rest }: ButtonContainerProps) {
       <HStack space={6}>
         <CustomButton value="1" icon={Backspace} />
         <CustomButton value="0" onPress={() => handlePress("0")} />
-        <CustomButton value="." onPress={() => handlePress(".")} />
+        <CustomButton value="." onPress={() => handlePress("dot")} />
         <CustomButton
           value="="
           icon={Equals}

@@ -7,9 +7,9 @@ export function avoidMultipleFollowingOperations(
   value: string,
   newOperation: string
 ) {
-  const valueWithoutMultipleOperations = value.replace(
-    /\+\+|--|*|\/|/g,
-    newOperation
-  );
-  return valueWithoutMultipleOperations;
+  // const valueWithoutMultipleOperations = value.replace(
+  //   /\+\+|--|*|\/|/g,
+  //   newOperation
+  // );
+  return;
 }
