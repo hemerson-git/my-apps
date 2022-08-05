@@ -37,7 +37,7 @@ export function Clock() {
         right="-32"
         bottom="0"
       >
-        PM
+        {Number(TIME.hours) > 12 ? "PM" : "AM"}
       </Text>
     </HStack>
   );
