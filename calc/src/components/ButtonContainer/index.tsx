@@ -8,7 +8,8 @@ import {
   Minus,
   Plus,
   Equals,
-  Percent,
+  PlusMinus,
+  Repeat,
 } from "phosphor-react-native";
 import { useCalcProvider } from "../../contexts/CalcContext";
 
@@ -27,7 +28,6 @@ interface ButtonFunctionsProps {
 }
 
 export function ButtonContainer({ ...rest }: ButtonContainerProps) {
-  const [result, setResult] = useState("");
   const { handleSetExpression, expression, handleSetResult } =
     useCalcProvider();
 
@@ -46,6 +46,13 @@ export function ButtonContainer({ ...rest }: ButtonContainerProps) {
       if (expression.length === 1) {
         handleSetExpression("0");
         return;
+      }
+    },
+
+    plusminus: () => {
+      if (expression !== "0" && !isNaN(Number(expression))) {
+        const newExpression = eval(expression) * -1;
+        handleSetExpression(newExpression.toString());
       }
     },
 
@@ -69,8 +76,6 @@ export function ButtonContainer({ ...rest }: ButtonContainerProps) {
     const parcedValue = value
       .toLowerCase()
       .trim() as keyof ButtonFunctionsProps;
-
-    const exceptions = ["ac", "back", "="];
 
     if (expression === "0" && value === "0") {
       return;
@@ -134,9 +139,9 @@ export function ButtonContainer({ ...rest }: ButtonContainerProps) {
         />
 
         <CustomButton
-          onPress={() => handlePress("percent")}
-          value="%"
-          icon={Percent}
+          onPress={() => handlePress("plusminus")}
+          value="plusMinus"
+          icon={PlusMinus}
           theme="primary"
         />
 
@@ -185,7 +190,7 @@ export function ButtonContainer({ ...rest }: ButtonContainerProps) {
       </HStack>
 
       <HStack space={6}>
-        <CustomButton value="1" icon={Backspace} />
+        <CustomButton value="1" icon={Repeat} />
         <CustomButton value="0" onPress={() => handlePress("0")} />
         <CustomButton value="." onPress={() => handlePress("dot")} />
         <CustomButton
