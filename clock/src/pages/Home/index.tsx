@@ -1,6 +1,9 @@
 import { VStack, Text } from "native-base";
 import { useEffect, useState } from "react";
+
+// Components
 import { Clock } from "../../components/Clock";
+import { Timer } from "../../components/Timer";
 
 export function Home() {
   return (
@@ -9,7 +12,7 @@ export function Home() {
         Home
       </Text>
 
-      <Clock />
+      <Timer />
     </VStack>
   );
 }

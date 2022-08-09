@@ -4,10 +4,12 @@ import {
   Inter_600SemiBold,
   Inter_700Bold,
 } from "@expo-google-fonts/inter";
-import { NativeBaseProvider, StatusBar, Text } from "native-base";
+import { NativeBaseProvider, StatusBar, Text, useTheme } from "native-base";
 import React from "react";
+
 import { Home } from "./src/pages/Home";
 import { THEME } from "./src/themes/styles";
+import { Loading } from "./src/components/Loading";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -19,14 +21,14 @@ export default function App() {
   if (!fontsLoaded) {
     return (
       <NativeBaseProvider theme={THEME}>
-        <Text>Loading..</Text>
+        <Loading />
       </NativeBaseProvider>
     );
   }
 
   return (
     <NativeBaseProvider theme={THEME}>
-      <StatusBar />
+      <StatusBar translucent backgroundColor="transparent" />
       <Home />
     </NativeBaseProvider>
   );
