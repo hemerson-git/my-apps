@@ -10,6 +10,7 @@ import React from "react";
 import { Home } from "./src/pages/Home";
 import { THEME } from "./src/themes/styles";
 import { Loading } from "./src/components/Loading";
+import { Pomodoro } from "./src/pages/Pomodoro";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -29,7 +30,7 @@ export default function App() {
   return (
     <NativeBaseProvider theme={THEME}>
       <StatusBar translucent backgroundColor="transparent" />
-      <Home />
+      <Pomodoro />
     </NativeBaseProvider>
   );
 }

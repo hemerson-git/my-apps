@@ -1,58 +1,70 @@
-import { useState } from "react";
-import { Button, HStack, Pressable, Text, useTheme, VStack } from "native-base";
-import RNDateTimePicker, {
-  DateTimePickerAndroid,
-} from "@react-native-community/datetimepicker";
+import { useEffect, useState } from "react";
+import {
+  Button,
+  HStack,
+  IconButton,
+  Pressable,
+  Text,
+  useTheme,
+  VStack,
+} from "native-base";
+import Icon from "@expo/vector-icons/Feather";
 
 import { ClockChar } from "../ClockChar";
 
-export function Timer() {
+import { useCountdown } from "../../contexts/CountdownContext";
+
+interface ClockProps {
+  time: number;
+}
+
+export function Timer({ time }: ClockProps) {
   const { colors } = useTheme();
-  const [showPicker, setShowPicker] = useState(false);
-  const [time, setTime] = useState("");
+  const {
+    MINUTE,
+    SECONDS,
+    startCountdown,
+    handleStopCountdown,
+    isActive,
+    handleResetTimer,
+  } = useCountdown();
 
-  function handleSetTimer() {
-    setShowPicker(!showPicker);
-
-    if (showPicker) {
-      DateTimePickerAndroid.open;
-      console.log("teste");
-    }
-
-    DateTimePickerAndroid.dismiss;
-  }
+  useEffect(() => {}, []);
 
   return (
     <VStack>
       <Text>Timer</Text>
 
-      <HStack>
-        <Pressable
-          flexDirection="row"
-          onPress={() => DateTimePickerAndroid.open}
-        >
+      <HStack alignItems="center" justifyContent="center">
+        <Pressable flexDirection="row" onPress={() => {}}>
           <ClockChar char="0" />
           <ClockChar char="0" />
           <ClockChar char=":" />
-          <ClockChar char="0" />
-          <ClockChar char="0" />
+          <ClockChar char={String(MINUTE)[0]} />
+          <ClockChar char={String(MINUTE)[1]} />
           <ClockChar char=":" />
-          <ClockChar char="0" />
-          <ClockChar char="0" />
+          <ClockChar char={String(SECONDS)[0]} />
+          <ClockChar char={String(SECONDS)[1]} />
         </Pressable>
       </HStack>
 
-      <Button onPress={handleSetTimer}>
-        <Text>Set Timer</Text>
-      </Button>
+      <HStack>
+        {isActive ? (
+          <Button onPress={handleStopCountdown} flex={1}>
+            <Text>Stop</Text>
+          </Button>
+        ) : (
+          <Button onPress={startCountdown} flex={1}>
+            <Text>Start</Text>
+          </Button>
+        )}
 
-      {showPicker && (
-        <RNDateTimePicker
-          value={new Date()}
-          accentColor={colors.primary[500]}
-          mode="time"
+        <IconButton
+          icon={<Icon name="trash" size={24} color={colors.red[500]} />}
+          onPress={handleResetTimer}
+          disabled={isActive}
         />
-      )}
+      </HStack>
     </VStack>
   );
 }
