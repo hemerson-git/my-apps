@@ -5,13 +5,14 @@ import { CountdownProvider } from "../../contexts/CountdownContext";
 // COMPONENTS
 import { Timer } from "../../components/Timer";
 import { Header } from "../../components/Header";
+import WorkingAnimation from "../../assets/working.json";
 
 export function Pomodoro() {
   const TIME = 25 * 60; // 25 minutes
 
   return (
     <CountdownProvider timeInSeconds={TIME}>
-      <Header title="Pomodoro Timer" />
+      <Header title="Pomodoro Timer" animation={WorkingAnimation} />
 
       <VStack
         flex={1}

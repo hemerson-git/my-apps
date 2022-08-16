@@ -1,25 +1,23 @@
 import { Heading, HStack, Text, View } from "native-base";
 import LottieView from "lottie-react-native";
 
-import WorkingAnimation from "../../assets/working.json";
-
 interface HeaderProps {
   title: string;
+  animation: any;
 }
 
-export function Header({ title }: HeaderProps) {
+export function Header({ title, animation }: HeaderProps) {
   return (
     <HStack
       h={32}
       w="full"
-      bg="primary.500"
       justifyContent="center"
       position="absolute"
       top={0}
       right="0"
     >
       <LottieView
-        source={WorkingAnimation}
+        source={animation ?? ""}
         autoPlay
         style={{
           width: "100%",
