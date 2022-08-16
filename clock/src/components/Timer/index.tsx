@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   Button,
+  Heading,
   HStack,
   IconButton,
   Pressable,
@@ -14,11 +15,7 @@ import { ClockChar } from "../ClockChar";
 
 import { useCountdown } from "../../contexts/CountdownContext";
 
-interface ClockProps {
-  time: number;
-}
-
-export function Timer({ time }: ClockProps) {
+export function Timer() {
   const { colors } = useTheme();
   const {
     MINUTE,
@@ -36,26 +33,26 @@ export function Timer({ time }: ClockProps) {
       <Text>Timer</Text>
 
       <HStack alignItems="center" justifyContent="center">
-        <Pressable flexDirection="row" onPress={() => {}}>
+        <Pressable flexDirection="row" onPress={() => {}} mb="4">
           <ClockChar char="0" />
           <ClockChar char="0" />
           <ClockChar char=":" />
-          <ClockChar char={String(MINUTE)[0]} />
-          <ClockChar char={String(MINUTE)[1]} />
+          <ClockChar char={MINUTE[0]} />
+          <ClockChar char={MINUTE[1]} />
           <ClockChar char=":" />
-          <ClockChar char={String(SECONDS)[0]} />
-          <ClockChar char={String(SECONDS)[1]} />
+          <ClockChar char={SECONDS[0]} />
+          <ClockChar char={SECONDS[1]} />
         </Pressable>
       </HStack>
 
       <HStack>
         {isActive ? (
           <Button onPress={handleStopCountdown} flex={1}>
-            <Text>Stop</Text>
+            <Heading fontSize="xl">Stop</Heading>
           </Button>
         ) : (
           <Button onPress={startCountdown} flex={1}>
-            <Text>Start</Text>
+            <Heading fontSize="xl">Start</Heading>
           </Button>
         )}
 
