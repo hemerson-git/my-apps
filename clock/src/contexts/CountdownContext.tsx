@@ -10,6 +10,7 @@ import { getConvertedTimeToSeconds } from "../utils/parseTimeToString";
 interface CountdownContextData {
   MINUTE: string;
   SECONDS: string;
+  HOURS: string;
   time: number;
   isActive: boolean;
   setTime: (time: number) => void;
@@ -20,21 +21,23 @@ interface CountdownContextData {
 
 interface CountdownProps {
   children: ReactNode;
+  timeInSeconds: number;
 }
 
 const CountdownContext = createContext({} as CountdownContextData);
 
 let countdownTimeout: NodeJS.Timeout;
 
-export function CountdownProvider({ children }: CountdownProps) {
-  const [time, setTime] = useState(25 * 60); // 25 minutes
+export function CountdownProvider({ children, timeInSeconds }: CountdownProps) {
+  const [time, setTime] = useState(timeInSeconds ?? 0); // 25 minutes
   const [hasFinished, setHasFinished] = useState(false);
   const [isActive, setIsActive] = useState(false);
 
-  const { minutes, seconds } = getConvertedTimeToSeconds(time);
+  const { hours, minutes, seconds } = getConvertedTimeToSeconds(time);
 
   const MINUTE = minutes;
   const SECONDS = seconds;
+  const HOURS = hours;
 
   function startCountdown() {
     setIsActive(true);
@@ -45,7 +48,7 @@ export function CountdownProvider({ children }: CountdownProps) {
   }
 
   function handleResetTimer() {
-    setTime(25 * 60);
+    setTime(timeInSeconds);
     setHasFinished(false);
   }
 
@@ -65,6 +68,7 @@ export function CountdownProvider({ children }: CountdownProps) {
       value={{
         MINUTE,
         SECONDS,
+        HOURS,
         time,
         setTime,
         startCountdown,
@@ -73,7 +77,7 @@ export function CountdownProvider({ children }: CountdownProps) {
         handleResetTimer,
       }}
     >
-      <>{children}</>
+      {children}
     </CountdownContext.Provider>
   );
 }
