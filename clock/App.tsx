@@ -4,6 +4,7 @@ import {
   Inter_600SemiBold,
   Inter_700Bold,
 } from "@expo-google-fonts/inter";
+import { JetBrainsMono_400Regular } from '@expo-google-fonts/jetbrains-mono';
 import { NativeBaseProvider, StatusBar, Text, useTheme } from "native-base";
 import React from "react";
 
@@ -16,6 +17,7 @@ export default function App() {
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
     Inter_600SemiBold,
+    JetBrainsMono_400Regular,
     Inter_700Bold,
   });
 

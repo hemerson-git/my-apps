@@ -37,7 +37,12 @@ export function Header({ title, animation }: HeaderProps) {
           w="full"
         ></View>
 
-        <Heading color="white" fontSize={28} fontFamily={"heading"}>
+        <Heading
+          color="white"
+          fontSize={28}
+          fontFamily={"heading"}
+          fontWeight={700}
+        >
           {title}
         </Heading>
       </HStack>
