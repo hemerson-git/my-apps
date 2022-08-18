@@ -30,7 +30,7 @@ export function Header({ title, animation }: HeaderProps) {
       <HStack h={32} alignItems="center" justifyContent="center" flex={1}>
         <View
           backgroundColor="primary.500"
-          opacity={0.8}
+          opacity={0.5}
           position="absolute"
           top={0}
           h={48}

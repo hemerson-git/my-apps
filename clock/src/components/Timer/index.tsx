@@ -9,6 +9,7 @@ import {
   VStack,
 } from "native-base";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { ClockChar } from "../ClockChar";
 
@@ -69,17 +70,29 @@ export function Timer({ initialTime, intervalTime }: TimerProps) {
 
       <HStack>
         {isActive ? (
-          <Button onPress={handleStopCountdown} flex={1}>
-            <Heading fontSize="xl">Stop</Heading>
+          <Button onPress={handleStopCountdown} flex={1} bg="primary.500">
+            <HStack space="2" alignItems="center">
+              <Heading fontSize="xl" color="white">
+                Stop
+              </Heading>
+
+              <Ionicons name="pause" color="white" size={24} />
+            </HStack>
           </Button>
         ) : (
-          <Button onPress={startCountdown} flex={1}>
-            <Heading fontSize="xl">Start</Heading>
+          <Button onPress={startCountdown} flex={1} bg="primary.500">
+            <HStack space="2" alignItems="center">
+              <Heading fontSize="xl" color="white">
+                Start
+              </Heading>
+
+              <Ionicons name="play" color="white" size={24} />
+            </HStack>
           </Button>
         )}
 
         <IconButton
-          icon={<Icon name="refresh" size={24} color={colors.red[500]} />}
+          icon={<Ionicons name="refresh" size={28} color={colors.red[500]} />}
           onPress={handleResetTimer}
           disabled={isActive}
         />
