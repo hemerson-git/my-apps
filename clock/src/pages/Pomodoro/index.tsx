@@ -9,6 +9,7 @@ import WorkingAnimation from "../../assets/working.json";
 
 export function Pomodoro() {
   const TIME = 25 * 60; // 25 minutes
+  const INTERVAL = 5 * 60; // 5 minutes
 
   return (
     <CountdownProvider timeInSeconds={TIME}>
@@ -23,7 +24,7 @@ export function Pomodoro() {
         borderTopRadius={48}
         mt="32"
       >
-        <Timer />
+        <Timer initialTime={TIME} intervalTime={INTERVAL} />
       </VStack>
     </CountdownProvider>
   );

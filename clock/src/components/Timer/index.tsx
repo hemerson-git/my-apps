@@ -14,10 +14,13 @@ import { ClockChar } from "../ClockChar";
 
 import { useCountdown } from "../../contexts/CountdownContext";
 
-export function Timer() {
+interface TimerProps {
+  initialTime: number;
+  intervalTime?: number;
+}
+
+export function Timer({ initialTime, intervalTime }: TimerProps) {
   const { colors } = useTheme();
-  const INITIAL_TIME = 25 * 60; // 25 minutes
-  const INTERVAL_TIME = 5 * 60; // 5 minutes
 
   const {
     MINUTE,
@@ -29,18 +32,17 @@ export function Timer() {
     handleResetTimer,
     handleSetCountdown,
     hasFinished,
-    time,
   } = useCountdown();
 
   useEffect(() => {
     if (!isActive && !hasFinished) {
-      handleSetCountdown(INITIAL_TIME, INTERVAL_TIME);
+      handleSetCountdown(initialTime, intervalTime);
     }
   }, []);
 
   useEffect(() => {
     if (hasFinished && !isActive) {
-      handleSetCountdown(INTERVAL_TIME, INTERVAL_TIME);
+      handleSetCountdown(initialTime, intervalTime);
       startCountdown();
     }
   }, [hasFinished, isActive]);
