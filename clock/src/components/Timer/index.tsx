@@ -38,7 +38,7 @@ export function Timer({ initialTime, intervalTime }: TimerProps) {
     if (!isActive && !hasFinished) {
       handleSetCountdown(initialTime, intervalTime);
     }
-  }, []);
+  }, [initialTime, intervalTime]);
 
   useEffect(() => {
     if (hasFinished && !isActive) {
