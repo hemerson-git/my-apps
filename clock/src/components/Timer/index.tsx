@@ -5,38 +5,61 @@ import {
   HStack,
   IconButton,
   Pressable,
-  Text,
   useTheme,
   VStack,
 } from "native-base";
-import Icon from "@expo/vector-icons/Feather";
+import Icon from "@expo/vector-icons/MaterialCommunityIcons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { ClockChar } from "../ClockChar";
 
 import { useCountdown } from "../../contexts/CountdownContext";
 
-export function Timer() {
+interface TimerProps {
+  initialTime: number;
+  intervalTime?: number;
+}
+
+export function Timer({ initialTime, intervalTime }: TimerProps) {
   const { colors } = useTheme();
+
   const {
     MINUTE,
     SECONDS,
+    HOURS,
     startCountdown,
     handleStopCountdown,
     isActive,
     handleResetTimer,
+    handleSetCountdown,
+    hasFinished,
   } = useCountdown();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (!isActive && !hasFinished) {
+      handleSetCountdown(initialTime, intervalTime);
+    }
+  }, [initialTime, intervalTime]);
+
+  useEffect(() => {
+    if (hasFinished && !isActive) {
+      handleSetCountdown(initialTime, intervalTime);
+      startCountdown();
+    }
+  }, [hasFinished, isActive]);
 
   return (
     <VStack>
-      <Text>Timer</Text>
-
       <HStack alignItems="center" justifyContent="center">
         <Pressable flexDirection="row" onPress={() => {}} mb="4">
-          <ClockChar char="0" />
-          <ClockChar char="0" />
-          <ClockChar char=":" />
+          {Number(HOURS) > 0 && (
+            <>
+              <ClockChar char={HOURS[0]} />
+              <ClockChar char={HOURS[1]} />
+              <ClockChar char=":" />
+            </>
+          )}
+
           <ClockChar char={MINUTE[0]} />
           <ClockChar char={MINUTE[1]} />
           <ClockChar char=":" />
@@ -47,17 +70,29 @@ export function Timer() {
 
       <HStack>
         {isActive ? (
-          <Button onPress={handleStopCountdown} flex={1}>
-            <Heading fontSize="xl">Stop</Heading>
+          <Button onPress={handleStopCountdown} flex={1} bg="primary.500">
+            <HStack space="2" alignItems="center">
+              <Heading fontSize="xl" color="white">
+                Stop
+              </Heading>
+
+              <Ionicons name="pause" color="white" size={24} />
+            </HStack>
           </Button>
         ) : (
-          <Button onPress={startCountdown} flex={1}>
-            <Heading fontSize="xl">Start</Heading>
+          <Button onPress={startCountdown} flex={1} bg="primary.500">
+            <HStack space="2" alignItems="center">
+              <Heading fontSize="xl" color="white">
+                Start
+              </Heading>
+
+              <Ionicons name="play" color="white" size={24} />
+            </HStack>
           </Button>
         )}
 
         <IconButton
-          icon={<Icon name="trash" size={24} color={colors.red[500]} />}
+          icon={<Ionicons name="refresh" size={28} color={colors.red[500]} />}
           onPress={handleResetTimer}
           disabled={isActive}
         />

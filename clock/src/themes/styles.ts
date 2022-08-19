@@ -35,9 +35,28 @@ export const THEME = extendTheme({
     white: "#FFFFFF",
   },
 
+  fontConfig: {
+    Inter: {
+      400: {
+        normal: "Inter_400Regular",
+      },
+
+      700: {
+        normal: "Inter_700Bold",
+      },
+    },
+
+    JetBrainsMono: {
+      400: {
+        normal: "JetBrainsMono_400Regular",
+      },
+    },
+  },
+
   fonts: {
-    heading: "Inter_700Bold",
-    body: "Inter_400Regular",
+    heading: "Inter",
+    body: "Inter",
+    mono: "JetBrainsMono",
   },
 
   fontSizes: {

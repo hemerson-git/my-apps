@@ -9,7 +9,8 @@ export function ClockChar({ char, ...rest }: ClockCharProps) {
     <Heading
       color="primary.500"
       fontSize="7xl"
-      fontFamily="heading"
+      fontFamily="mono"
+      fontWeight={400}
       w="10"
       textAlign="center"
       {...rest}
