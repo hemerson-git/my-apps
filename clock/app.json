@@ -3,6 +3,13 @@
     "name": "clock",
     "slug": "clock",
     "version": "1.4.0",
+    "plugins": [
+      [
+        "expo-notifications", {
+          "color": "#5E239D"
+        }
+      ]
+    ],
     "assetBundlePatterns": [
       "**/*"
     ]

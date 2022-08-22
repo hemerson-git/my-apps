@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { Subscription } from "expo-modules-core";
+import * as Notifications from "expo-notifications";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
 import {
   Button,
   Heading,
@@ -8,20 +10,31 @@ import {
   useTheme,
   VStack,
 } from "native-base";
-import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { ClockChar } from "../ClockChar";
 
 import { useCountdown } from "../../contexts/CountdownContext";
+import { getTimerNotification } from "../../utils/messages";
 
 interface TimerProps {
   initialTime: number;
   intervalTime?: number;
 }
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
+
 export function Timer({ initialTime, intervalTime }: TimerProps) {
   const { colors } = useTheme();
+  const notificationListener = useRef() as MutableRefObject<Subscription>;
+  const responseListener = useRef() as MutableRefObject<Subscription>;
+  const [notification, setNotification] = useState(false);
 
   const {
     MINUTE,
@@ -35,18 +48,64 @@ export function Timer({ initialTime, intervalTime }: TimerProps) {
     hasFinished,
   } = useCountdown();
 
+  // First time the component is rendered, wait to start the countdown
   useEffect(() => {
     if (!isActive && !hasFinished) {
       handleSetCountdown(initialTime, intervalTime);
     }
   }, [initialTime, intervalTime]);
 
+  // Interval
   useEffect(() => {
     if (hasFinished && !isActive) {
       handleSetCountdown(initialTime, intervalTime);
       startCountdown();
     }
   }, [hasFinished, isActive]);
+
+  useEffect(() => {
+    if (hasFinished) {
+      schedulePushNotification();
+    }
+  }, [hasFinished]);
+
+  useEffect(() => {
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((response) => {
+        console.log(response);
+      });
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
+
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
+
+  async function schedulePushNotification() {
+    const message = getTimerNotification({
+      event: hasFinished ? "finishedTime" : "finishedInterval",
+      locale: "en-US",
+    });
+
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: message.title,
+        body: message.body,
+        data: message.data,
+      },
+
+      trigger: {
+        seconds: message.trigger.seconds,
+      },
+    });
+  }
 
   return (
     <VStack>
