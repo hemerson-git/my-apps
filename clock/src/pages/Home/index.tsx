@@ -12,7 +12,7 @@ export function Home() {
         Home
       </Text>
 
-      <Timer />
+      <Timer initialTime={25} intervalTime={5} />
     </VStack>
   );
 }
