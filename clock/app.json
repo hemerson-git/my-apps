@@ -5,13 +5,22 @@
     "version": "1.4.0",
     "plugins": [
       [
-        "expo-notifications", {
+        "expo-notifications",
+        {
           "color": "#5E239D"
         }
       ]
     ],
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "android": {
+      "package": "com.hemerson.clock"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "5992fb19-a573-400b-b493-45736fc753b4"
+      }
+    }
   }
 }
