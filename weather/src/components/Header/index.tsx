@@ -1,7 +1,14 @@
 import { Heading, HStack, Text } from "native-base";
 import { Feather } from "@expo/vector-icons";
 
-export function Header() {
+// Types
+import { WeatherResponseProps, ResultsProps } from "../../types/hg";
+
+interface HeaderProps {
+  cityName: string;
+}
+
+export function Header({ cityName }: HeaderProps) {
   return (
     <HStack alignItems="center" justifyContent="space-between" px={2}>
       <Heading
@@ -15,7 +22,7 @@ export function Header() {
 
       <Text color="white" alignItems="center">
         <Feather name="map-pin" size={18} /> {` `}
-        Vitória da Conquista, BA
+        {cityName}
       </Text>
     </HStack>
   );

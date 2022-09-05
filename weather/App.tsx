@@ -13,7 +13,6 @@ import {
 
 import { THEME } from "./src/themes/styles";
 import { Home } from "./src/pages/Home";
-import { Text } from "react-native";
 
 export default function App() {
   const [fontsLoaded] = useFonts({ Inter_400Regular, Inter_700Bold });
@@ -53,7 +52,7 @@ export default function App() {
   return (
     <NativeBaseProvider theme={THEME}>
       <StatusBar hidden />
-      <Home />
+      <Home location={location} />
     </NativeBaseProvider>
   );
 }
