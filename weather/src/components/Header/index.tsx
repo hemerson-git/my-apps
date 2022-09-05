@@ -9,6 +9,8 @@ interface HeaderProps {
 }
 
 export function Header({ cityName }: HeaderProps) {
+  console.log(cityName);
+
   return (
     <HStack alignItems="center" justifyContent="space-between" px={2}>
       <Heading

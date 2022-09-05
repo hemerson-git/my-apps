@@ -1,6 +1,10 @@
+import { useRef } from "react";
 import { Text, VStack } from "native-base";
-import { Feather } from "@expo/vector-icons";
 
+// COMPONENTS
+import LottieView from "lottie-react-native";
+
+// TYPES
 import { ForecastProps } from "../../types/hg";
 
 interface DailyCardProps {
@@ -8,6 +12,8 @@ interface DailyCardProps {
 }
 
 export function DailyCard({ weatherInfo }: DailyCardProps) {
+  const animation = useRef();
+
   return (
     <VStack
       bg="primary.500"
@@ -18,13 +24,11 @@ export function DailyCard({ weatherInfo }: DailyCardProps) {
       mr={2}
     >
       <Text fontSize={32} color="primary.100" mb={3}>
-        {weatherInfo.max}º
+        {weatherInfo?.max}º
       </Text>
 
-      <Feather name="sun" size={48} />
-
       <Text mt={3} color="primary.100" fontSize={18}>
-        {weatherInfo.date}
+        {weatherInfo?.date}
       </Text>
     </VStack>
   );

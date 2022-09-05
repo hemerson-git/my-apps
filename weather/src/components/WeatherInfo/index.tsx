@@ -9,7 +9,7 @@ interface WeatherInfoProps {
 }
 
 export function WeatherInfo({ weatherMeta }: WeatherInfoProps) {
-  console.log(weatherMeta);
+  const forecast = weatherMeta.forecast || [];
 
   return (
     <HStack justifyContent="space-between" py={8}>
@@ -23,14 +23,18 @@ export function WeatherInfo({ weatherMeta }: WeatherInfoProps) {
         <Text color="white">
           <Feather name="droplet" size={14} />
           {` `}
-          {weatherMeta.humidity}%
+          {weatherMeta?.humidity}%
         </Text>
       </Column>
 
       <Box flexDirection="row" alignItems="center">
         <Column mr={4}>
-          <Text color="white">Max {weatherMeta?.forecast[1].max}º</Text>
-          <Text color="white">Min {weatherMeta?.forecast[1].min}º</Text>
+          {forecast.length > 0 ? (
+            <>
+              <Text color="white">Max {weatherMeta.forecast[1].max}º</Text>
+              <Text color="white">Min {weatherMeta.forecast[1].min}º</Text>
+            </>
+          ) : null}
         </Column>
 
         <Text fontSize="4xl" color="white" w={20} textAlign="center">

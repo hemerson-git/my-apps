@@ -31,12 +31,10 @@ export default function App() {
           return;
         }
 
-        let loc = await getCurrentPositionAsync({});
-        console.log(loc);
+        let loc = await getCurrentPositionAsync();
         setLocation(loc);
       } catch (err) {
         setErrorMsg(`${err}`);
-        console.log(err);
       }
     })();
   }, []);

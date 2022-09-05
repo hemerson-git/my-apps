@@ -13,6 +13,7 @@ import { weatherApi } from "../../services/hg_api";
 // TYPES
 import { ForecastProps, ResultsProps } from "../../types/hg";
 import { LocationObject } from "expo-location";
+import { Loading } from "../../components/Loading";
 
 interface HomeProps {
   location: LocationObject;
@@ -20,28 +21,38 @@ interface HomeProps {
 
 export function Home({ location }: HomeProps) {
   const [forecastValues, setForecastValues] = useState([] as ForecastProps[]);
-  const [todaysCondition, setTodaysCondition] = useState({} as ResultsProps);
+  const [todaysCondition, setTodaysCondition] = useState<
+    ResultsProps | undefined
+  >();
 
   useEffect(() => {
-    (async () => {
-      if (location.coords) {
-        const { data } = await weatherApi.get("weather", {
+    if (location.coords) {
+      console.log(111111);
+
+      weatherApi
+        .get("weather", {
           params: {
             key: "c073b2d6",
-            lat: location.coords.latitude,
-            lon: location.coords.longitude,
+            lat: location.coords.latitude.toFixed(2),
+            lon: location.coords.longitude.toFixed(2),
           },
+        })
+        .then(({ data }) => {
+          if (forecastValues.length === 0) {
+            setForecastValues(data.results.forecast);
+            setTodaysCondition(data.results);
+          }
         });
+    }
+  }, [location, todaysCondition]);
 
-        setForecastValues(data.results.forecast);
-        setTodaysCondition(data.results);
-      }
-    })();
-  }, []);
+  if (!location.coords || !todaysCondition?.city) {
+    return <Loading />;
+  }
 
   return (
     <VStack bg="primary.700" flex={1} py={4} px={2}>
-      <Header cityName={todaysCondition.city} />
+      <Header cityName={todaysCondition?.city} />
       <WeatherInfo weatherMeta={todaysCondition} />
 
       <DayWidget />
