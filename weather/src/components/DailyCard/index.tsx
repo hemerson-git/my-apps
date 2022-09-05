@@ -11,7 +11,7 @@ export function DailyCard() {
       borderRadius={"xl"}
       mr={2}
     >
-      <Text fontSize={48} color="primary.100" mb={3}>
+      <Text fontSize={32} color="primary.100" mb={3}>
         24º
       </Text>
 

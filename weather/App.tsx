@@ -26,22 +26,21 @@ export default function App() {
     (async () => {
       try {
         let { status } = await requestForegroundPermissionsAsync();
-        if (!location) {
-          if (status === "granted") {
-            setErrorMsg("Permission to access location was denied.");
-            return;
-          }
-
-          let loc = await getCurrentPositionAsync({});
-          console.log(loc);
-          setLocation(loc);
+        if (status !== "granted") {
+          setErrorMsg("Permission to access location was denied.");
+          console.log("ERROR");
+          return;
         }
+
+        let loc = await getCurrentPositionAsync({});
+        console.log(loc);
+        setLocation(loc);
       } catch (err) {
         setErrorMsg(`${err}`);
         console.log(err);
       }
     })();
-  }, [location]);
+  }, []);
 
   if (!fontsLoaded) {
     return (
@@ -55,7 +54,6 @@ export default function App() {
     <NativeBaseProvider theme={THEME}>
       <StatusBar hidden />
       <Home />
-      <Text>{JSON.stringify(location)}</Text>
     </NativeBaseProvider>
   );
 }
