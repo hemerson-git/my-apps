@@ -1,14 +1,22 @@
 import clearDay from "../assets/clean_day.json";
 import clearNight from "../assets/clean_night.json";
+import rainingNight from "../assets/raining_night.json";
+import cloudlyDay from "../assets/cloudly_day.json";
 
 const weatherImageSlug = {
-  clearDay,
-  clearNight,
-  cloudlyNight: "",
-  rain: "",
+  clear_day: clearDay,
+  cloudly_day: cloudlyDay,
+  cloudly_night: clearNight,
+  rain: rainingNight,
 };
 
-export function getWeatherImage(condition: keyof typeof weatherImageSlug) {
+export interface WeatherImageProps {
+  condition: keyof typeof weatherImageSlug;
+}
+
+export function getWeatherImage({ condition }: WeatherImageProps) {
   const imageSlug = weatherImageSlug[condition];
+  console.log(condition);
+
   return imageSlug;
 }

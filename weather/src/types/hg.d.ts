@@ -1,3 +1,4 @@
+import { WeatherImageProps } from "../utils/weather_animations";
 export interface WeatherResponseProps {
   by: string;
   valid_key: boolean;
@@ -31,5 +32,5 @@ export interface ForecastProps {
   max: number;
   min: number;
   description: string;
-  condition: string;
+  condition: WeatherImageProps;
 }
