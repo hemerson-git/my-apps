@@ -1,24 +1,67 @@
-import { Text, VStack } from "native-base";
-import { Feather } from "@expo/vector-icons";
+import { useRef, useState } from "react";
+import { Text, useTheme, VStack } from "native-base";
 
-export function DailyCard() {
+// COMPONENTS
+import LottieView, {
+  AnimatedLottieViewProps,
+  AnimationObject,
+} from "lottie-react-native";
+
+// TYPES
+import { ForecastProps } from "../../types/hg";
+
+// UTILS
+import {
+  getWeatherImage,
+  WeatherImageProps,
+} from "../../utils/weather_animations";
+
+interface DailyCardProps {
+  weatherInfo: ForecastProps;
+}
+
+export function DailyCard({ weatherInfo }: DailyCardProps) {
+  const { colors } = useTheme();
+
+  const animation = useRef(null);
+  const [animationSource, setAnimationSource] = useState<
+    string | AnimationObject | { uri: string }
+  >();
+
+  if (weatherInfo) {
+    const { condition } = weatherInfo;
+    const image = getWeatherImage(condition);
+    if (!animationSource) setAnimationSource(image);
+  }
+
   return (
     <VStack
       bg="primary.500"
       alignItems="center"
-      px={4}
       py={2}
       borderRadius={"xl"}
+      w={24}
       mr={2}
     >
-      <Text fontSize={48} color="primary.100" mb={3}>
-        24º
+      <Text fontSize={32} color="primary.100">
+        {weatherInfo?.max}º
       </Text>
 
-      <Feather name="sun" size={48} />
+      {animationSource && (
+        <LottieView
+          autoPlay
+          ref={animation}
+          style={{
+            width: 80,
+            height: 80,
+            backgroundColor: colors.primary[500],
+          }}
+          source={animationSource}
+        />
+      )}
 
-      <Text mt={3} color="primary.100" fontSize={18}>
-        Amanhã
+      <Text color="primary.100" fontSize={18}>
+        {weatherInfo?.date}
       </Text>
     </VStack>
   );
