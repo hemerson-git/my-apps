@@ -27,8 +27,6 @@ export function Home({ location }: HomeProps) {
 
   useEffect(() => {
     if (location.coords) {
-      console.log(111111);
-
       weatherApi
         .get("weather", {
           params: {
@@ -55,7 +53,7 @@ export function Home({ location }: HomeProps) {
       <Header cityName={todaysCondition?.city} />
       <WeatherInfo weatherMeta={todaysCondition} />
 
-      <DayWidget />
+      <DayWidget condition={todaysCondition} />
 
       <Row>
         <FlatList
