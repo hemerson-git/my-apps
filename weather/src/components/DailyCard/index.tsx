@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Text, useTheme, VStack } from "native-base";
 
 // COMPONENTS
@@ -25,14 +25,19 @@ export function DailyCard({ weatherInfo }: DailyCardProps) {
 
   const animation = useRef(null);
   const [animationSource, setAnimationSource] = useState<
-    string | AnimationObject | { uri: string }
+    string | AnimationObject | { uri: string } | undefined
   >();
 
-  if (weatherInfo) {
-    const { condition } = weatherInfo;
-    const image = getWeatherImage(condition);
-    if (!animationSource) setAnimationSource(image);
-  }
+  useEffect(() => {
+    if (weatherInfo) {
+      const { condition } = weatherInfo;
+
+      const image = getWeatherImage({
+        condition,
+      } as unknown as WeatherImageProps);
+      setAnimationSource(image);
+    }
+  }, [weatherInfo]);
 
   return (
     <VStack
