@@ -9,19 +9,49 @@ import {
   Text,
   useTheme,
   VStack,
+  useToast,
 } from "native-base";
 
 import { Modal } from "../../components/Modal";
+import { Button } from "../../components/Button";
+
+interface ToDoProps {
+  title: string;
+  description: string;
+  isComplete?: boolean;
+}
 
 export function Home() {
   const { colors } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
+  const [todoList, setTodoList] = useState<ToDoProps[]>([]);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const toast = useToast();
 
   function handleOpenModal() {
     setIsOpen((prevState) => !prevState);
   }
 
   function handleCloseModal() {
+    setIsOpen(false);
+  }
+
+  function handleCreateTodo() {
+    const newToDo = {
+      title,
+      description,
+      isClosed: false,
+    };
+
+    setTodoList((prevState) => [...prevState, newToDo]);
+
+    setTitle("");
+    setDescription("");
+    toast.show({
+      description: "Success",
+      backgroundColor: colors.green[500],
+    });
     setIsOpen(false);
   }
 
@@ -39,30 +69,11 @@ export function Home() {
       </Heading>
 
       <ScrollView>
-        <Text color="white" fontSize="lg">
-          to do something
-        </Text>
-        <Text color="white" fontSize="lg">
-          to do something
-        </Text>
-        <Text color="white" fontSize="lg">
-          to do something
-        </Text>
-        <Text color="white" fontSize="lg">
-          to do something
-        </Text>
-        <Text color="white" fontSize="lg">
-          to do something
-        </Text>
-        <Text color="white" fontSize="lg">
-          to do something
-        </Text>
-        <Text color="white" fontSize="lg">
-          to do something
-        </Text>
-        <Text color="white" fontSize="lg">
-          to do something
-        </Text>
+        {todoList.map((todo, index) => (
+          <Text color="white" fontSize="lg" key={`${index}`}>
+            {todo.title}
+          </Text>
+        ))}
       </ScrollView>
 
       <HStack>
@@ -90,16 +101,24 @@ export function Home() {
             Title:
           </Text>
 
-          <Input placeholder="Example" />
+          <Input placeholder="Example" value={title} onChangeText={setTitle} />
         </Box>
 
-        <Box>
+        <Box mb="4">
           <Text mb="2" fontWeight="bold">
             Description:
           </Text>
 
-          <Input placeholder="Example" multiline numberOfLines={8} />
+          <Input
+            placeholder="Example"
+            multiline
+            numberOfLines={8}
+            value={description}
+            onChangeText={setDescription}
+          />
         </Box>
+
+        <Button title="Add New to-do" onPress={handleCreateTodo} />
       </Modal>
     </VStack>
   );
